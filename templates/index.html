@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CourseGuide AI - SAU M.Tech Department Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+            <div>
+                <b>CourseGuide AI</b>
+                <small>SAU Department Assistant</small>
+            </div>
+        </div>
+
+        <div class="side-label">STUDENT TRANSCRIPT PROFILE</div>
+        <div class="profile-card">
+            <div class="mb-2">
+                <label class="form-label-sm">Track:</label>
+                <select id="studentTrack" class="form-select-sm">
+                    <option value="aiml" selected>AI & Machine Learning (AIML)</option>
+                    <option value="networks">Advanced Networks & Systems</option>
+                    <option value="general">General CSE</option>
+                </select>
+            </div>
+            <div class="mb-1"><small>Completed Courses:</small></div>
+            <div class="completed-courses-box">
+                {% for code, name in courses.items() %}
+                <label class="course-check-item">
+                    <input type="checkbox" value="{{ code }}" class="course-checkbox" id="chk_{{ code }}">
+                    <span><b>{{ code|upper }}</b> - {{ name }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="side-label">TRY SAMPLE QUESTIONS</div>
+        <button class="suggestion" data-q="What are the prerequisites for Advanced ML?">Prerequisites for Advanced ML <span>↗</span></button>
+        <button class="suggestion" data-q="How many credits is FML?">Course credits for FML <span>↗</span></button>
+        <button class="suggestion" data-q="Tell me about AI">Ambiguous question test <span>↗</span></button>
+        <button class="suggestion" data-q="Can I take Deep Learning?">Eligibility check <span>↗</span></button>
+        <button class="suggestion" data-q="What is the attendance policy?">Attendance policy <span>↗</span></button>
+        <button class="suggestion" data-q="What electives can I take next?">Forward infer electives <span>↗</span></button>
+
+        <div class="sidebar-note">
+            <b>Logic Engine Grounding</b>
+            <p>Using SWI-Prolog & PySwip. Evaluates Horn clauses strictly without guessing missing transcript facts.</p>
+        </div>
+        <div class="sidebar-footer">South Asian University · Department of Computer Science</div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <span class="eyebrow">ACADEMIC ADVISING</span>
+                <h1>Ask your department assistant</h1>
+                <p>Logical inference over South Asian University M.Tech (CSE) curriculum rules.</p>
+            </div>
+            <div class="status-pill"><span class="pulse-green"></span> SWI-Prolog Connected</div>
+        </header>
+
+        <section class="workspace">
+            <div class="chat-panel">
+                <div class="chat-heading">
+                    <div class="bot-avatar">✦</div>
+                    <div>
+                        <b>CourseGuide Assistant</b>
+                        <small>Prolog Horn-Clause Engine</small>
+                    </div>
+                    <button id="clear" class="clear-btn">New chat</button>
+                </div>
+
+                <div id="messages" class="messages">
+                    <div class="message assistant">
+                        <div class="avatar">✦</div>
+                        <div class="bubble">
+                            <b>Hello! I'm CourseGuide.</b>
+                            <p>Ask about courses, prerequisites, credit counts, or academic policies.</p>
+                            <div class="sample-chips">
+                                <button data-q="What are the prerequisites for Advanced ML?">Prerequisites</button>
+                                <button data-q="How many credits is FML?">Credits</button>
+                                <button data-q="Can I take Deep Learning?">Check Eligibility</button>
+                                <button data-q="Tell me about AI">Ambiguity handling</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="chat-form" class="composer">
+                    <textarea id="question" rows="1" placeholder="Ask a question about your department..." required></textarea>
+                    <button type="submit">➤</button>
+                    <div class="composer-hint">Enter to send · Shift + Enter for a new line</div>
+                </form>
+
+                <div class="compare-box">
+                    <div>
+                        <b>Symbolic KB vs LLM Benchmark</b>
+                        <p>Compare Prolog deterministic answers against statistical LLM outputs.</p>
+                    </div>
+                    <button id="compare" class="compare-btn">Compare answer</button>
+                </div>
+                
+                <div id="comparison" class="comparison hidden"></div>
+            </div>
+
+            <aside class="inspector">
+                <div class="inspector-title">
+                    <div>
+                        <span class="eyebrow">LIVE EXPLANATION</span>
+                        <h2>4-Stage Logical Pipeline</h2>
+                    </div>
+                    <span class="live-dot"></span>
+                </div>
+
+                <div class="stage" id="stage-box-1">
+                    <div class="stage-number">1</div>
+                    <div>
+                        <b>Natural Language Input</b>
+                        <p id="stage-input">Waiting for a question...</p>
+                    </div>
+                    <span class="stage-state" id="state-input">READY</span>
+                </div>
+
+                <div class="stage" id="stage-box-2">
+                    <div class="stage-number">2</div>
+                    <div>
+                        <b>NLP & Entity Parser</b>
+                        <p id="stage-nlp">Intent and entity slot matching will appear here.</p>
+                    </div>
+                    <span class="stage-state" id="state-nlp">WAITING</span>
+                </div>
+
+                <div class="stage" id="stage-box-3">
+                    <div class="stage-number">3</div>
+                    <div>
+                        <b>Ambiguity & Confidence Filter</b>
+                        <p id="stage-ambiguity">Verifies query specification before logic execution.</p>
+                    </div>
+                    <span class="stage-state" id="state-ambiguity">WAITING</span>
+                </div>
+
+                <div class="stage" id="stage-box-4">
+                    <div class="stage-number">4</div>
+                    <div>
+                        <b>SWI-Prolog Reasoning Engine</b>
+                        <p id="stage-reasoning">PySwip execution trace over Horn clauses.</p>
+                    </div>
+                    <span class="stage-state" id="state-reasoning">WAITING</span>
+                </div>
+
+                <div class="confidence-card">
+                    <div class="confidence-head">
+                        <b>Parser Confidence Score</b>
+                        <span id="confidence-value">—</span>
+                    </div>
+                    <div class="meter"><div id="confidence-meter" style="width: 0%;"></div></div>
+                    <small id="confidence-caption">Heuristic slot-binding confidence.</small>
+                </div>
+
+                <div class="trace-card">
+                    <b>SWI-Prolog Proof Trace</b>
+                    <ol id="trace">
+                        <li>Submit a query to inspect Prolog backward/forward chaining steps.</li>
+                    </ol>
+                </div>
+            </aside>
+        </section>
+        
+        <footer>CourseGuide AI · Prolog Assistant</footer>
+    </main>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
