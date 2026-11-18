@@ -1,4 +1,4 @@
-# CampusGuide AI - Department Q&A Assistant
+# CourseGuide AI - Department Q&A Assistant
 
 
 ## Setup Instructions
